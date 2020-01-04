@@ -6,6 +6,7 @@ mv $HOME/.bashrc "$HOME/bashrc-bak"     # save the original until I'm happy with
 cp ./bashrc "$HOME/.bashrc"
 cp ./bash_aliases "$HOME/.bash_aliases"
 cp ./vimrc "$HOME/.vimrc"
+cp ./screenrc "$HOME/.screenrc"
 # cp .ovpn ~/Documents/
 
 ### Changing the default ssh keys
