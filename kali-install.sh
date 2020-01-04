@@ -2,11 +2,10 @@
 
 ## This file is to allow faster and more consistent set up for kali
 
-mv ~/.bashrc ~/bashrc-bak     # save the original until I'm happy with mine
-cp ./bashrc ~/.bashrc
-cp ./bash-aliases ~/.bash-aliases
-cp ./screenrc ~/.screenrc
-cp ./vimrc ~/.vimrc
+mv $HOME/.bashrc "$HOME/bashrc-bak"     # save the original until I'm happy with mine
+cp ./bashrc "$HOME/.bashrc"
+cp ./bash_aliases "$HOME/.bash_aliases"
+cp ./vimrc "$HOME/.vimrc"
 # cp .ovpn ~/Documents/
 
 ### Changing the default ssh keys
