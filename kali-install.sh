@@ -22,7 +22,14 @@ apt install -y terminator steghide tree gdb gdb-doc strace ltrace
 
 
 ### Files to install via git
-cd /opt
+if [ ! -d /opt ]
+then
+    mkdir /opt
+    cd /opt
+else
+    cd /opt
+fi
+
 # nmap automator - at least until I make my own
 git clone https://github.com/21y4d/nmapAutomator.git
 
