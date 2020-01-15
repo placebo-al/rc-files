@@ -18,7 +18,7 @@ dpkg-reconfigure openssh-server
 
 ### Files to install with apt
 apt update && apt -y upgrade && apt -y autoremove
-apt install terminator steghide tree gdb gdb-doc strace ltrace
+apt install -y terminator steghide tree gdb gdb-doc strace ltrace
 
 
 ### Files to install via git
