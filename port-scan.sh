@@ -5,13 +5,13 @@ if [ $# -ne 1 ] ; then
   exit
 fi
 
-victim=$1
+box=$1
 echo "Scanning for open ports on $victim "
 
-nmap -Pn -sS -p- --open -T4 --min-rate=1000 $victim -oN ${victim}
+nmap -Pn -sS -p- --open -T4 --min-rate=1000 $box -oN ${box}
 
-ports=$(cat ${victim} | grep open | cut -d " " -f 1 | cut -d "/" -f 1 | tr "\n" "," | cut -c3- | head -c-2)
+ports=$(cat ${box} | grep open | cut -d " " -f 1 | cut -d "/" -f 1 | tr "\n" "," | cut -c3- | head -c-2)
 
-echo "Now scanning $ports on $victim"
+echo "Now scanning $ports on $box"
 
-nmap -Pn -p $ports -sCV --script=default $victim -oN ${victim}-nmap
+nmap -Pn -p $ports -sCV --script=default $box -oN ${box}-nmap
