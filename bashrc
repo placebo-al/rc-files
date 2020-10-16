@@ -5,7 +5,7 @@ export CLICOLOR=1
 
 export LSCOLORS=ExFxBxDxCxegedabagacad
 
-# Don't save duplicate lines and change history size
+# Set history size, and ignore duplicate lines
 HISTCONTROL=ignoreboth
 HISTSIZE=10000
 HISTFIESIZE=20000
