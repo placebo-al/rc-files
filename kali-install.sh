@@ -46,3 +46,8 @@ wget https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64s
                                                                                                                    
 # unix-privesc-check                                                                                               
 wget http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz 
+
+# Linpeas.sh and Winpeas scripts
+wget https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh > /opt/linpeas.sh
+wget https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe > /opt/winpeas86.exe
+wget https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe > /opt/winpeas64.exe
