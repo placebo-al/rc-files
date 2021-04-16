@@ -41,13 +41,13 @@ git clone https://github.com/rebootuser/LinEnum.git
                                                                                                                    
 ### Files to download with wget                                                                                    
 # pspy 32 and 64 bit                                                                                               
-wget https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy32s                                       
-wget https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64s                                       
+# https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy32s                                       
+# https://github.com/DominicBreuker/pspy/releases/download/v1.2.0/pspy64s                                       
                                                                                                                    
 # unix-privesc-check                                                                                               
 wget http://pentestmonkey.net/tools/unix-privesc-check/unix-privesc-check-1.4.tar.gz 
 
 # Linpeas.sh and Winpeas scripts
-wget https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh -o /opt/linpeas.sh
-wget https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe -o /opt/winpeas86.exe
-wget https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe -o /opt/winpeas64.exe
+# https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/linPEAS/linpeas.sh
+# https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/x86/Release/winPEAS.exe
+# https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/winPEAS/bin/x64/Release/winPEAS.exe
