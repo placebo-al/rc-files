@@ -29,8 +29,8 @@ alias wget='wget -c'
 
 alias extip='curl ifconfig.me; echo'
 
-# Does overwrite ss but I don't really use it
-alias ss='searchsploit $1'
+# Makes it a little easier to use searchsploit
+alias ssp='searchsploit $1'
 alias ssx='searchsploit -x $1'
 
 alias webup='python -m SimpleHTTPServer 80'
