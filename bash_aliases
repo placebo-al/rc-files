@@ -16,6 +16,7 @@ alias l='ls -CF'
 alias c='clear'
 alias tree='tree -C -L 2'
 
+# The usual cd shortcuts
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'
