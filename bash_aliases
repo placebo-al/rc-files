@@ -60,12 +60,12 @@ function port-scan () {
     fi
     box=$1
     echo "Scanning for open ports on $box"
-    nmap -Pn -sS -p- --open -T4 --min-rate=1000 $box -oN ${box}
+    sudo nmap -Pn -sS -p- --open -T4 --min-rate=1000 $box -oN ${box}
     # Could probably improve my regex on this line
     ports=$(cat ${box} | grep open | cut -d " " -f 1 | cut -d "/" -f 1 | tr "\n" "," | cut -c3- | head -c-2)
     echo "Now scanning $ports on $box"
     # And add a error clause for no open ports
-    nmap -Pn -p $ports -sCV --script=default $box -oN ${box}-nmap
+    sudo nmap -Pn -p $ports -sCV --script=default $box -oN ${box}-nmap
 }
 
 alias htb='screen sudo openvpn ~/Documents/hackthebox.ovpn'
