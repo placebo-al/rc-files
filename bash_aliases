@@ -68,6 +68,7 @@ function port-scan () {
     nmap -Pn -p $ports -sCV --script=default $box -oN ${box}-nmap
 }
 
-
+alias htb='screen sudo openvpn ~/Documents/hackthebox.ovpn'
+alias thm='screen sudo openvpn ~/Documents/tryhackme.ovpn'
 
 
