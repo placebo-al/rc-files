@@ -13,6 +13,7 @@ HISTFIESIZE=20000
 # Append to history and check window size
 shopt -s histappend
 shopt -s checkwinsize
+shopt -s cdspell
 
 # Set architecture flags
 export ARCHFLAGS="-arch x86_64"
