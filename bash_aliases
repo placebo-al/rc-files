@@ -34,6 +34,7 @@ alias extip='curl ifconfig.me; echo'
 # Makes it a little easier to use searchsploit
 alias ssp='searchsploit $1'
 alias ssx='searchsploit -x $1'
+alias ssm='searchsploit -m $1'
 
 alias webup='python -m SimpleHTTPServer 80'
 
