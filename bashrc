@@ -1,11 +1,6 @@
 # Append to my Bashrc file
 
-# export PS1="[\[\033[32m\]\w]\[\033[0m\]\n\[\033[1;36m\]\u\[\033[1;33m\]-> \[\033[0m\]"
-# export CLICOLOR=1
-
-# export LSCOLORS=ExFxBxDxCxegedabagacad
-
-# Set history size, and ignore duplicate lines
+# Set history size, and ignore duplicate lines, have to figure out a way to add over the previous bashrc file
 HISTCONTROL=ignoreboth:erasedups
 HISTSIZE=10000
 HISTFIESIZE=20000
