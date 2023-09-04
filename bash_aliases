@@ -44,15 +44,6 @@ alias open='xdg-open'
 # alias shieldsup='tcpdump -i tun0 -nnvv src net 10.10.14.0/24 and dst 10.10.14.23 -w - | tee capture.pcap | tcpdump -n -r -'
 
 
-# Histignore ignores the following commands from the history file (at least sometimes)
-export HISTIGNORE="ls:cd:c:clear:?:??"
-# ignoreboth is shorthand for ignorespace and ignoredups, 
-# erasedups is as the name suggests
-export HISTCONTROL=ignoreboth:erasedups 
-
-
-export EDITOR='vim'
-
 # A shortcut for scanning THM and HTB boxes
 function port-scan () {
     if [ $# -ne 1 ] ; then
@@ -69,7 +60,7 @@ function port-scan () {
     sudo nmap -Pn -p $ports -sCV --script=default $box -oN ${box}-nmap
 }
 
-alias htb='screen sudo openvpn ~/Documents/hackthebox.ovpn'
-alias thm='screen sudo openvpn ~/Documents/tryhackme.ovpn'
+alias htb='screen sudo openvpn ~/PathTo/hackthebox.ovpn'
+alias thm='screen sudo openvpn ~/PathTo/tryhackme.ovpn'
 
 
