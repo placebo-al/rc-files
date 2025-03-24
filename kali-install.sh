@@ -16,7 +16,7 @@ done
 ### 2. Clone dotfiles repo if not already cloned
 DOTFILES_DIR="$HOME/dotfiles"
 if [ ! -d "$DOTFILES_DIR" ]; then
-    git clone https://github.com/YOURUSERNAME/dotfiles.git "$DOTFILES_DIR"
+    git clone https://github.com/placebo-al/rc-files "$DOTFILES_DIR"
 else
     (cd "$DOTFILES_DIR" && git pull)
 fi
@@ -33,6 +33,31 @@ echo "[+] Updating system and installing packages..."
 sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove
 sudo apt install -y terminator steghide tree gdb gdb-doc strace ltrace wget curl git stow
 
+# Additional recommended packages
+sudo apt install -y seclists gobuster feroxbuster wfuzz ffuf tmux neofetch bloodhound python3-pip rlwrap nishang powershell enum4linux smbclient crackmapexec hydra john hashcat exiftool imagemagick jq sqlmap docker.io docker-compose ufw open-vm-tools-desktop fuse zsh fonts-powerline
+
+# Python upgrades
+python3 -m pip install --upgrade pip
+python3 -m pip install --user impacket pyftpdlib droopescan updog httpx certipy-ad
+
+# Docker setup
+sudo systemctl enable docker --now
+sudo usermod -aG docker $USER
+
+# UFW Firewall setup
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw enable
+
+# Git Configuration (replace with your details)
+git config --global user.name "Your Name"
+git config --global user.email "youremail@example.com"
+git config --global pull.rebase false
+git config --global credential.helper store
+
+# VM Tools
+sudo systemctl enable --now open-vm-tools.service
+
 ### 5. SSH key regeneration (enhanced)
 echo "[+] Reconfiguring SSH server keys..."
 sudo mkdir -p /etc/ssh/defaultsshkeys
@@ -45,7 +70,7 @@ sudo mkdir -p /opt && sudo chown "$USER":"$USER" /opt
 cd /opt
 
 tools=(
-  "https://github.com/21y4d/nmapAutomator.git"
+  # "https://github.com/21y4d/nmapAutomator.git"
   "https://github.com/bitsadmin/wesng.git"
   "https://github.com/rebootuser/LinEnum.git"
 )
