@@ -33,8 +33,8 @@ alias wget='wget -c'
 alias open='xdg-open'
 
 # VPN Aliases (renamed to avoid conflict)
-alias htbvpn='screen sudo openvpn ~/PathTo/hackthebox.ovpn'
-alias thmvpn='screen sudo openvpn ~/PathTo/tryhackme.ovpn'
+alias htbvpn='tmux sudo openvpn ~/PathTo/hackthebox.ovpn'
+alias thmvpn='tmux sudo openvpn ~/PathTo/tryhackme.ovpn'
 
 # Searchsploit functions
 ssp() { searchsploit "$@"; }

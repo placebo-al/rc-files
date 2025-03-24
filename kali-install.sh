@@ -7,7 +7,7 @@ echo "[+] Starting Kali configuration setup..."
 
 ### 1. Backup original dotfiles
 echo "[+] Backing up original dotfiles..."
-for file in .bashrc .bash_aliases .vimrc .screenrc; do
+for file in .bashrc .bash_aliases .vimrc .tmux.conf; do
     if [ -f "$HOME/$file" ]; then
         mv "$HOME/$file" "$HOME/${file}.bak.$(date +%Y%m%d)"
     fi
@@ -26,7 +26,7 @@ echo "[+] Linking dotfiles..."
 ln -sf "$DOTFILES_DIR/bashrc" "$HOME/.bashrc"
 ln -sf "$DOTFILES_DIR/bash_aliases" "$HOME/.bash_aliases"
 ln -sf "$DOTFILES_DIR/vimrc" "$HOME/.vimrc"
-ln -sf "$DOTFILES_DIR/screenrc" "$HOME/.screenrc"
+ln -sf "$DOTFILES_DIR/tmux.conf" "$HOME/.tmux.conf"
 
 ### 4. System update and package installations
 echo "[+] Updating system and installing packages..."
