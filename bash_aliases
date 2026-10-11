@@ -16,7 +16,6 @@ fi
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-alias cls='clear'
 
 # git shortcuts
 alias gs='git status'
